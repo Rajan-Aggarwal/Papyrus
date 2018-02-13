@@ -3,9 +3,8 @@ package test;
 import mapper.Mapper;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
+
 
 class Student {
     Integer id;
