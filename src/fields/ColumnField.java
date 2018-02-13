@@ -8,5 +8,6 @@ public abstract class ColumnField {
 
     public boolean nullable = true;
     public boolean primary = false;
+    public boolean foreign = false;
 
 }
