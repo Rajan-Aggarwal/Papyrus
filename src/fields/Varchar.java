@@ -9,6 +9,5 @@ public class Varchar extends ColumnField {
 
         super(args);
         this.size = size;
-
     }
 }
