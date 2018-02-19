@@ -1,11 +1,11 @@
 package fields;
 
-public class Varchar extends ColumnField {
+public class VarcharField extends ColumnField {
 
     String text;
     private int size;
 
-    Varchar (int size, boolean ... args) {
+    VarcharField(int size, boolean ... args) {
 
         super(args);
         this.size = size;
