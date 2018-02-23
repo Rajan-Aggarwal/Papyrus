@@ -6,11 +6,15 @@ import java.text.SimpleDateFormat;
 
 public class TimeField extends ColumnField {
 
-    Date time;
+    private Date time;
 
-    TimeField(String time, boolean ... args) throws ParseException {
+    public TimeField(String time, boolean ... args) throws ParseException {
 
         super(args);
         this.time = new SimpleDateFormat("hh:mm:ss").parse(time);
+    }
+
+    public Date getTime() {
+        return this.time;
     }
 }
