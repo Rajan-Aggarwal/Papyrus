@@ -11,5 +11,6 @@ public class Numeric extends ColumnField {
         super(args);
         this.size = size;
         this.precision = precision;
+
     }
 }
