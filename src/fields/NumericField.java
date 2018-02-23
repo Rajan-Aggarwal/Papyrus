@@ -1,12 +1,12 @@
 package fields;
 
-public class Numeric extends ColumnField {
+public class NumericField extends ColumnField {
 
     double var;
     private int size;
     private int precision;
 
-    Numeric (int size, int precision, boolean ... args){ // nullable, primary, foreign, defValue
+    NumericField(int size, int precision, boolean ... args){ // nullable, primary, foreign, defValue
 
         super(args);
         this.size = size;
