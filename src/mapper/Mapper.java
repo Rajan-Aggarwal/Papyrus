@@ -48,7 +48,7 @@ public class Mapper {
     //////////////////////////////////////////////
 
     /*
-        CREATING ALL THE CLAUSES WHICH APPLY TO EVERY TYPE
+        CLAUSES WHICH APPLY TO EVERY TYPE
      */
 
     private String nullClause(boolean isNullable) {
@@ -66,10 +66,20 @@ public class Mapper {
         }
     }
 
-    ////apply only to varchar////
+    private  String uniqueClause(boolean isUnique) {
+        if (isUnique) {
+            return "unique";
+        } else {
+            return "";
+        }
+    }
+
+    ////only for varchar////
     private String defaultClause(String defaultText) {
         return "default '" + defaultText + "'";
     }
+
+    /////create for others here////
 
     /*
       CREATING FINAL QUERY
@@ -90,7 +100,9 @@ public class Mapper {
                 query.append(fieldName + " varchar(" + fieldValue.getSize() + ") ");
                 query.append(nullClause(fieldValue.isNullable()) + " ");
                 query.append(primaryClause(fieldValue.isPrimary()) + " ");
-                query.append(defaultClause(fieldValue.getDefaultText()));
+                query.append(defaultClause(fieldValue.getDefaultText()) + " ");
+                query.append(uniqueClause(fieldValue.isUnique()));
+                query.append(",");
 
             }
 
@@ -98,6 +110,8 @@ public class Mapper {
 
         }
 
+        //delete the last comma
+        query.deleteCharAt(query.length()-1);
         query.append(");");
         return query.toString();
     }

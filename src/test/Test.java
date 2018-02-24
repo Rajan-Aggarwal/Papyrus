@@ -8,7 +8,7 @@ import mapper.Mapper;
 import java.lang.reflect.Field;
 
 class Student {
-    VarcharField name = new VarcharField(10, "Rajan", false, true);
+    VarcharField name = new VarcharField(10, "Rajan", false, true, true);
 }
 
 public class Test {

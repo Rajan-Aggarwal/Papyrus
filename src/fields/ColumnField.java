@@ -12,15 +12,26 @@ public abstract class ColumnField {
 
     private boolean isNullable = true;
     private boolean isPrimary = false;
+    private boolean isUnique = false;
 
     //leave it for now on. we'll look into it
     //private boolean isForeign;
 
     ColumnField (boolean ... args) {
 
-        ArrayList<Boolean> varargs = new ArrayList<Boolean>();
+        if (args.length>=1) {
+            isNullable = args[0];
+            if (args.length>=2) {
+                isPrimary = args[1];
+                if (args.length>=3) {
+                    isUnique = args[2];
+                }
+            }
+        }
 
-        for (int i=0; i<args.length; i++) {
+        //ArrayList<Boolean> varargs = new ArrayList<Boolean>();
+
+        /*for (int i=0; i<args.length; i++) {
             varargs.add(args[i]);
         }
 
@@ -34,14 +45,14 @@ public abstract class ColumnField {
             }
         }*/
 
-        if (varargs.size()==1) {
+        /*if (varargs.size()==1) {
             isNullable = varargs.get(0);
         } else {
             isNullable = varargs.get(0);
             isPrimary = varargs.get(1);
-        }
+        }*/
 
-        System.out.println("nullable" + isNullable + "primary" + isPrimary);
+        //System.out.println("nullable" + isNullable + "primary" + isPrimary);
 
         //isForeign = (boolean) varargs.get(2);s
 
@@ -54,6 +65,9 @@ public abstract class ColumnField {
     public boolean isPrimary() {
         return isPrimary;
     }
+
+    public boolean isUnique() { return isUnique; }
+
 
     /*public boolean isForeign() {
         return isForeign;
