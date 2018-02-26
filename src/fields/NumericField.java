@@ -23,4 +23,19 @@ public class NumericField extends ColumnField {
         this.defaultValue = defaultValue;
 
     }
+
+    public double getDefaultValue() {
+
+        return defaultValue;
+    }
+
+    public int getSize () {
+
+        return size;
+    }
+
+    public int getPrecision () {
+
+        return precision;
+    }
 }
