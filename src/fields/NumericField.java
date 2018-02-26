@@ -11,7 +11,7 @@ public class NumericField extends ColumnField {
         super(args);
         this.size = size;
         this.precision = precision;
-        this.defaultValue = -999.9999; //sorry but only way i can think of as of now. pls fix
+        this.defaultValue = Double.NaN;
 
     }
 
