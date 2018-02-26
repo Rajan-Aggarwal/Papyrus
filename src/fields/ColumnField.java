@@ -59,14 +59,19 @@ public abstract class ColumnField {
     }
 
     public boolean isNullable() {
+
         return isNullable;
     }
 
     public boolean isPrimary() {
+
         return isPrimary;
     }
 
-    public boolean isUnique() { return isUnique; }
+    public boolean isUnique() {
+
+        return isUnique;
+    }
 
 
     /*public boolean isForeign() {
