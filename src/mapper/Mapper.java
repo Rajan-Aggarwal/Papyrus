@@ -75,7 +75,10 @@ public class Mapper {
     }
 
     ////only for varchar////
-    private String defaultClause(String defaultText) {
+    private String defaultVarcharClause(String defaultText) {
+        if (defaultText.equals("")) {
+            return "";
+        }
         return "default '" + defaultText + "'";
     }
 
@@ -100,7 +103,7 @@ public class Mapper {
                 query.append(fieldName + " varchar(" + fieldValue.getSize() + ") ");
                 query.append(nullClause(fieldValue.isNullable()) + " ");
                 query.append(primaryClause(fieldValue.isPrimary()) + " ");
-                query.append(defaultClause(fieldValue.getDefaultText()) + " ");
+                query.append(defaultVarcharClause(fieldValue.getDefaultText()) + " ");
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append(",");
 
