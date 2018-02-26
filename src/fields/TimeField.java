@@ -1,20 +1,31 @@
 package fields;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class TimeField extends ColumnField {
 
-    private Date time;
+    private Date defaultTime;
+    
+    public TimeField(boolean ... args) throws ParseException {
+        
+        super(args);
+        String timeStamp = new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance().getTime());
+        DateFormat df = new SimpleDateFormat("hh:mm:ss");
+        this.defaultTime = df.parse(timeStamp);
+    }
 
-    public TimeField(String time, boolean ... args) throws ParseException {
+    public TimeField(String defaultTime, boolean ... args) throws ParseException {
 
         super(args);
-        this.time = new SimpleDateFormat("hh:mm:ss").parse(time);
+        this.defaultTime = new SimpleDateFormat("hh:mm:ss").parse(defaultTime);
     }
 
     public Date getTime() {
-        return this.time;
+
+        return this.defaultTime;
     }
 }
