@@ -1,12 +1,11 @@
 package mapper;
 
 import fields.*;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+//import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /*
     The ORM engine
