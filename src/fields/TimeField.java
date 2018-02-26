@@ -8,24 +8,35 @@ import java.text.SimpleDateFormat;
 
 public class TimeField extends ColumnField {
 
-    private Date defaultTime;
+    private String defaultTime;
+    private String fieldName;
     
-    public TimeField(boolean ... args) throws ParseException {
+    public TimeField(String fieldName, boolean ... args) throws ParseException {
         
         super(args);
-        String timeStamp = new SimpleDateFormat("hh:mm:ss").format(Calendar.getInstance().getTime());
-        DateFormat df = new SimpleDateFormat("hh:mm:ss");
-        this.defaultTime = df.parse(timeStamp);
+        this.fieldName = fieldName;
+        this.defaultTime = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
     }
 
-    public TimeField(String defaultTime, boolean ... args) throws ParseException {
+    public TimeField(String fieldName, String defaultTime, boolean ... args) throws ParseException {
 
         super(args);
-        this.defaultTime = new SimpleDateFormat("hh:mm:ss").parse(defaultTime);
+        this.fieldName = fieldName;
+        this.defaultTime = new SimpleDateFormat("HH:mm:ss").format(defaultTime);
     }
 
-    public Date getTime() {
+    public String getTime() {
 
         return this.defaultTime;
+    }
+
+    public String getFieldName() {
+
+        return fieldName;
+    }
+
+    public String getDefaultValue() {
+
+        return defaultTime.toString();
     }
 }
