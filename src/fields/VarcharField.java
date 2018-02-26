@@ -22,10 +22,12 @@ public class VarcharField extends ColumnField {
     }
 
     public String getDefaultText() {
+
         return defaultText;
     }
 
     public int getSize() {
+
         return size;
     }
 
