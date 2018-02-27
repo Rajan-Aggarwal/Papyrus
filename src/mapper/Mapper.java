@@ -78,6 +78,8 @@ public class Mapper {
         }
     }
 
+    //only for varchar
+
     private String defaultVarcharClause(String defaultText) {
 
         if (defaultText.equals("")) {
@@ -85,6 +87,8 @@ public class Mapper {
         }
         return "default '" + defaultText + "' ";
     }
+
+    //only for numeric
 
     private String defaultNumericClause(double defaultValue) {
 
@@ -94,6 +98,8 @@ public class Mapper {
         return "default " + defaultValue;
     }
 
+    //only for date
+
     private String defaultDateClause(String defaultDate) {
 
         String dateStamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
@@ -102,6 +108,8 @@ public class Mapper {
         }
         return "default '" + defaultDate + "' ";
     }
+
+    //only for time
 
     private String defaultTimeClause(String defaultTime) {
 
@@ -128,7 +136,7 @@ public class Mapper {
 
                 field.setAccessible(true);
                 VarcharField fieldValue = (VarcharField) field.get(this.table);
-                query.append(fieldValue.getFieldName()).append(" varchar(").append(fieldValue.getSize()).append(") ");
+                query.append(field.getName()).append(" varchar(").append(fieldValue.getSize()).append(") ");
                 query.append(nullClause(fieldValue.isNullable())).append(" ");
                 query.append(primaryClause(fieldValue.isPrimary())).append(" ");
                 query.append(defaultVarcharClause(fieldValue.getDefaultText())).append(" ");
@@ -138,7 +146,7 @@ public class Mapper {
 
                 field.setAccessible(true);
                 NumericField fieldValue = (NumericField) field.get(this.table);
-                query.append(fieldValue.getFieldName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(") ");
+                query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(") ");
                 query.append(nullClause(fieldValue.isNullable())).append(" ");
                 query.append(primaryClause(fieldValue.isPrimary())).append(" ");
                 query.append(defaultNumericClause(fieldValue.getDefaultValue())).append(" ");
@@ -148,7 +156,7 @@ public class Mapper {
 
                 field.setAccessible(true);
                 DateField fieldValue = (DateField) field.get(this.table);
-                query.append(fieldValue.getFieldName()).append(" date '").append(fieldValue.getDate()).append("' ");
+                query.append(field.getName()).append(" date '").append(fieldValue.getDate()).append("' ");
                 query.append(nullClause(fieldValue.isNullable())).append(" ");
                 query.append(primaryClause(fieldValue.isPrimary())).append(" ");
                 query.append((defaultDateClause(fieldValue.getDefaultValue())));
@@ -158,7 +166,7 @@ public class Mapper {
 
                 field.setAccessible(true);
                 TimeField fieldValue = (TimeField) field.get(this.table);
-                query.append(fieldValue.getFieldName()).append(" time '").append(fieldValue.getTime()).append("' ");
+                query.append(field.getName()).append(" time '").append(fieldValue.getTime()).append("' ");
                 query.append(nullClause(fieldValue.isNullable())).append(" ");
                 query.append(primaryClause(fieldValue.isPrimary())).append(" ");
                 query.append((defaultTimeClause(fieldValue.getDefaultValue())));
