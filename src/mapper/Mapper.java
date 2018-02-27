@@ -178,7 +178,6 @@ public class Mapper {
         }
 
         //delete the last comma
-        query.deleteCharAt(query.length() - 2);
         primaryKeys.deleteCharAt(primaryKeys.length() - 1);
         query.append(primaryKeys.append(")\n"));
         query.append(");");
