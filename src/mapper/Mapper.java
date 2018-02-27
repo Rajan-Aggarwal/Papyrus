@@ -27,10 +27,8 @@ public class Mapper {
         fields = table.getClass().getDeclaredFields();
 
         for (Field field : fields) {
-            if (field.getType().equals(VarcharField.class)||field.getType().equals(NumericField.class)||
-            field.getType().equals(DateField.class)||field.getType().equals(TimeField.class)) {
-                continue;
-            } else {
+            if (!field.getType().equals(VarcharField.class) && !field.getType().equals(NumericField.class) &&
+            !field.getType().equals(DateField.class) && !field.getType().equals(TimeField.class)) {
                 throw new InvalidFieldException();
             }
         }
@@ -39,8 +37,6 @@ public class Mapper {
             String query = createTableQuery(fields);
             System.out.println(query);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
             e.printStackTrace();
         }
 
@@ -126,7 +122,7 @@ public class Mapper {
       CREATING FINAL QUERY
      */
 
-    private String createTableQuery(Field[] fields) throws IllegalAccessException, InstantiationException {
+    private String createTableQuery(Field[] fields) throws IllegalAccessException {
 
         StringBuilder query = new StringBuilder("create table " + this.tableName + "(\n");
         StringBuilder primaryKeys = new StringBuilder("primary key(");
