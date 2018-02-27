@@ -1,9 +1,7 @@
 package test;
 
-import fields.ColumnField;
-import fields.DateField;
-import fields.TimeField;
-import fields.VarcharField;
+import fields.*;
+
 import mapper.InvalidFieldException;
 import mapper.Mapper;
 
@@ -13,12 +11,16 @@ import java.text.ParseException;
 
 class Student {
 
-    TimeField name;
-    //VarcharField
+//    TimeField name;
+    VarcharField name = new VarcharField( 5,"LOL", false, true, true);
+    NumericField name1 = new NumericField( 5, 5, 4.5, false, true);
+    DateField d1;
+    TimeField t1;
 
     {
         try {
-            name = new TimeField("DOB", false, true, true);
+            d1 = new DateField("2017-03-17", false, true);
+            t1 = new TimeField(false, true);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -34,3 +36,4 @@ public class Test {
         }
     }
 }
+

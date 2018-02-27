@@ -1,6 +1,5 @@
 package fields;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +18,10 @@ public class TimeField extends ColumnField {
     public TimeField(String defaultTime, boolean ... args) throws ParseException {
 
         super(args);
-        this.defaultTime = new SimpleDateFormat("HH:mm:ss").format(defaultTime);
+
+        //to check the validity of date string --> parse exception is thrown otherwise
+        Date date = new SimpleDateFormat("HH:mm:ss").parse(defaultTime);
+        this.defaultTime = defaultTime;
     }
 
     public String getTime() {

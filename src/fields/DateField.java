@@ -1,9 +1,9 @@
 package fields;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DateField extends ColumnField {
 
@@ -18,7 +18,11 @@ public class DateField extends ColumnField {
     public DateField(String defaultDate, boolean ... args) throws ParseException {
 
         super(args);
-        this.defaultDate = new SimpleDateFormat("yyyy-MM-dd").format(defaultDate);
+
+        //to check the validity of date string --> parse exception is thrown otherwise
+        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(defaultDate);
+        this.defaultDate = defaultDate;
+
     }
 
     public String getDate() {

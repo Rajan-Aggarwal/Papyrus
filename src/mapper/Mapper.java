@@ -139,7 +139,7 @@ public class Mapper {
                 query.append(field.getName()).append(" varchar(").append(fieldValue.getSize()).append(") ");
                 query.append(nullClause(fieldValue.isNullable())).append(" ");
                 query.append(primaryClause(fieldValue.isPrimary())).append(" ");
-                query.append(defaultVarcharClause(fieldValue.getDefaultText())).append(" ");
+                query.append(defaultVarcharClause(fieldValue.getDefaultText()));
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append(",");
             } else if (field.getType().equals(NumericField.class)) {
@@ -149,7 +149,7 @@ public class Mapper {
                 query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(") ");
                 query.append(nullClause(fieldValue.isNullable())).append(" ");
                 query.append(primaryClause(fieldValue.isPrimary())).append(" ");
-                query.append(defaultNumericClause(fieldValue.getDefaultValue())).append(" ");
+                query.append(defaultNumericClause(fieldValue.getDefaultValue()));
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append(",");
             } else if (field.getType().equals(DateField.class)) {
