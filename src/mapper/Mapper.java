@@ -57,13 +57,13 @@ public class Mapper {
         if (isNullable) {
             return "";
         }
-        return "not null";
+        return " not null";
     }
 
     private String primaryClause(boolean isPrimary) {
 
         if (isPrimary) {
-            return "primary key";
+            return " primary key";
         } else {
             return "";
         }
@@ -72,7 +72,7 @@ public class Mapper {
     private  String uniqueClause(boolean isUnique) {
 
         if (isUnique) {
-            return "unique";
+            return " unique";
         } else {
             return "";
         }
@@ -85,7 +85,7 @@ public class Mapper {
         if (defaultText.equals("")) {
             return "";
         }
-        return "default '" + defaultText + "' ";
+        return " default ('" + defaultText + "')";
     }
 
     //only for numeric
@@ -95,7 +95,7 @@ public class Mapper {
         if(defaultValue == Double.NaN) {
             return "";
         }
-        return "default " + defaultValue;
+        return " default (" + defaultValue + ")";
     }
 
     //only for date
@@ -106,7 +106,7 @@ public class Mapper {
         if (defaultDate.equals(dateStamp)) {
             return "";
         }
-        return "default '" + defaultDate + "' ";
+        return " default ('" + defaultDate + "')";
     }
 
     //only for time
@@ -117,7 +117,7 @@ public class Mapper {
         if (defaultTime.equals(timeStamp)) {
             return "";
         }
-        return "default '" + defaultTime + "' ";
+        return " default ('" + defaultTime + "')";
     }
 
     /////create for others here////
@@ -128,7 +128,7 @@ public class Mapper {
 
     private String createTableQuery(Field[] fields) throws IllegalAccessException, InstantiationException {
 
-        StringBuilder query = new StringBuilder("create table " + this.tableName + "(");
+        StringBuilder query = new StringBuilder("create table " + this.tableName + "(\n");
 
         for (Field field : fields) {
 
@@ -136,47 +136,48 @@ public class Mapper {
 
                 field.setAccessible(true);
                 VarcharField fieldValue = (VarcharField) field.get(this.table);
-                query.append(field.getName()).append(" varchar(").append(fieldValue.getSize()).append(") ");
-                query.append(nullClause(fieldValue.isNullable())).append(" ");
-                query.append(primaryClause(fieldValue.isPrimary())).append(" ");
-                query.append(defaultVarcharClause(fieldValue.getDefaultText()));
+                query.append(field.getName()).append(" varchar(").append(fieldValue.getSize()).append(")");
+                query.append(nullClause(fieldValue.isNullable()));
+                query.append(primaryClause(fieldValue.isPrimary()));
                 query.append(uniqueClause(fieldValue.isUnique()));
+                query.append(defaultVarcharClause(fieldValue.getDefaultText()));
                 query.append(",");
             } else if (field.getType().equals(NumericField.class)) {
 
                 field.setAccessible(true);
                 NumericField fieldValue = (NumericField) field.get(this.table);
-                query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(") ");
-                query.append(nullClause(fieldValue.isNullable())).append(" ");
-                query.append(primaryClause(fieldValue.isPrimary())).append(" ");
-                query.append(defaultNumericClause(fieldValue.getDefaultValue()));
+                query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(")");
+                query.append(nullClause(fieldValue.isNullable()));
+                query.append(primaryClause(fieldValue.isPrimary()));
                 query.append(uniqueClause(fieldValue.isUnique()));
+                query.append(defaultNumericClause(fieldValue.getDefaultValue()));
                 query.append(",");
             } else if (field.getType().equals(DateField.class)) {
 
                 field.setAccessible(true);
                 DateField fieldValue = (DateField) field.get(this.table);
-                query.append(field.getName()).append(" date '").append(fieldValue.getDate()).append("' ");
-                query.append(nullClause(fieldValue.isNullable())).append(" ");
-                query.append(primaryClause(fieldValue.isPrimary())).append(" ");
-                query.append((defaultDateClause(fieldValue.getDefaultValue())));
+                query.append(field.getName()).append(" date");
+                query.append(nullClause(fieldValue.isNullable()));
+                query.append(primaryClause(fieldValue.isPrimary()));
                 query.append(uniqueClause(fieldValue.isUnique()));
+                query.append((defaultDateClause(fieldValue.getDefaultValue())));
                 query.append(",");
             } else if (field.getType().equals(TimeField.class)) {
 
                 field.setAccessible(true);
                 TimeField fieldValue = (TimeField) field.get(this.table);
-                query.append(field.getName()).append(" time '").append(fieldValue.getTime()).append("' ");
-                query.append(nullClause(fieldValue.isNullable())).append(" ");
-                query.append(primaryClause(fieldValue.isPrimary())).append(" ");
-                query.append((defaultTimeClause(fieldValue.getDefaultValue())));
+                query.append(field.getName()).append(" time");
+                query.append(nullClause(fieldValue.isNullable()));
+                query.append(primaryClause(fieldValue.isPrimary()));
                 query.append(uniqueClause(fieldValue.isUnique()));
+                query.append((defaultTimeClause(fieldValue.getDefaultValue())));
                 query.append(",");
             }
+            query.append("\n");
         }
 
         //delete the last comma
-        query.deleteCharAt(query.length()-1);
+        query.deleteCharAt(query.length()-2);
         query.append(");");
         return query.toString();
     }
