@@ -60,10 +60,10 @@ public class Mapper {
         return " not null";
     }
 
-    private String primaryClause(boolean isPrimary) {
+    private String primaryClause(boolean isPrimary, Field field) {
 
         if (isPrimary) {
-            return " primary key";
+            return field.getName();
         } else {
             return "";
         }
@@ -129,6 +129,7 @@ public class Mapper {
     private String createTableQuery(Field[] fields) throws IllegalAccessException, InstantiationException {
 
         StringBuilder query = new StringBuilder("create table " + this.tableName + "(\n");
+        StringBuilder primaryKeys = new StringBuilder("primary key(");
 
         for (Field field : fields) {
 
@@ -138,7 +139,7 @@ public class Mapper {
                 VarcharField fieldValue = (VarcharField) field.get(this.table);
                 query.append(field.getName()).append(" varchar(").append(fieldValue.getSize()).append(")");
                 query.append(nullClause(fieldValue.isNullable()));
-                query.append(primaryClause(fieldValue.isPrimary()));
+                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field)).append(", ");
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append(defaultVarcharClause(fieldValue.getDefaultText()));
                 query.append(",");
@@ -148,7 +149,7 @@ public class Mapper {
                 NumericField fieldValue = (NumericField) field.get(this.table);
                 query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(")");
                 query.append(nullClause(fieldValue.isNullable()));
-                query.append(primaryClause(fieldValue.isPrimary()));
+                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field)).append(", ");
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append(defaultNumericClause(fieldValue.getDefaultValue()));
                 query.append(",");
@@ -158,7 +159,7 @@ public class Mapper {
                 DateField fieldValue = (DateField) field.get(this.table);
                 query.append(field.getName()).append(" date");
                 query.append(nullClause(fieldValue.isNullable()));
-                query.append(primaryClause(fieldValue.isPrimary()));
+                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field)).append(", ");
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append((defaultDateClause(fieldValue.getDefaultValue())));
                 query.append(",");
@@ -168,7 +169,7 @@ public class Mapper {
                 TimeField fieldValue = (TimeField) field.get(this.table);
                 query.append(field.getName()).append(" time");
                 query.append(nullClause(fieldValue.isNullable()));
-                query.append(primaryClause(fieldValue.isPrimary()));
+                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field)).append(",");
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append((defaultTimeClause(fieldValue.getDefaultValue())));
                 query.append(",");
@@ -177,7 +178,9 @@ public class Mapper {
         }
 
         //delete the last comma
-        query.deleteCharAt(query.length()-2);
+        query.deleteCharAt(query.length() - 2);
+        primaryKeys.deleteCharAt(primaryKeys.length() - 1);
+        query.append(primaryKeys.append(")\n"));
         query.append(");");
         return query.toString();
     }
