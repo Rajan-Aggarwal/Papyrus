@@ -1,11 +1,13 @@
 package test;
 
+import database.DAO;
 import fields.*;
 
 import mapper.InvalidFieldException;
 import mapper.Mapper;
 
 import java.lang.reflect.Field;
+import java.sql.Connection;
 import java.sql.Time;
 import java.text.ParseException;
 
@@ -34,6 +36,9 @@ public class Test {
         } catch (InvalidFieldException e) {
             System.out.println("Invalid Field");
         }
+
+        Connection conn = DAO.getConnection();
+
     }
 }
 
