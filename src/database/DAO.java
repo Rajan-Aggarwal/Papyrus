@@ -16,12 +16,6 @@ public class DAO
             System.out.println(e);
         }
 
-        if (conn!=null) {
-            System.out.println("GG!");
-        } else {
-            System.out.println("Damned!");
-        }
-
         return conn;
 
     }

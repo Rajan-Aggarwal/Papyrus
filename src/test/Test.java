@@ -14,15 +14,14 @@ import java.text.ParseException;
 class Student {
 
 //    TimeField name;
-    VarcharField name = new VarcharField( 5,"LOL", false, true, true);
-    NumericField name1 = new NumericField( 5, 5, 4.5, false, true);
+    VarcharField name = new VarcharField( 5, true, true);
+    NumericField name1 = new NumericField( 5, 5, true, true);
     DateField d1;
-    TimeField t1;
+
 
     {
         try {
-            d1 = new DateField("2017-03-17", false, true);
-            t1 = new TimeField(false, true);
+            d1 = new DateField("yyyy-MM-dd", "2012-06-23", true, true);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -37,7 +36,7 @@ public class Test {
             System.out.println("Invalid Field");
         }
 
-        Connection conn = DAO.getConnection();
+        //Connection conn = DAO.getConnection();
 
     }
 }

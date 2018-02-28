@@ -7,20 +7,23 @@ import java.util.Date;
 
 public class DateField extends ColumnField {
 
+    private String format;
     private String defaultDate;
 
     public DateField(boolean ... args) throws ParseException {
 
         super(args);
-        this.defaultDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        this.format = "";
+        this.defaultDate = "";
+
     }
 
-    public DateField(String defaultDate, boolean ... args) throws ParseException {
+    public DateField(String format, String defaultDate, boolean ... args) throws ParseException {
 
         super(args);
-
+        this.format = format;
         //to check the validity of date string --> parse exception is thrown otherwise
-        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(defaultDate);
+        Date date = new SimpleDateFormat(this.format).parse(defaultDate);
         this.defaultDate = defaultDate;
 
     }
@@ -30,8 +33,15 @@ public class DateField extends ColumnField {
         return defaultDate;
     }
 
-    public String getDefaultValue() {
+    public String getDefaultDate() {
 
-        return defaultDate.toString();
+        return defaultDate;
+
+    }
+
+    public String getFormat() {
+
+        return this.format;
+
     }
 }

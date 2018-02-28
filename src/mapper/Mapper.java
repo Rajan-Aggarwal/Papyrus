@@ -1,9 +1,13 @@
 package mapper;
 
+import database.DAO;
 import fields.*;
 //import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -28,17 +32,35 @@ public class Mapper {
 
         for (Field field : fields) {
             if (!field.getType().equals(VarcharField.class) && !field.getType().equals(NumericField.class) &&
-            !field.getType().equals(DateField.class) && !field.getType().equals(TimeField.class)) {
+            !field.getType().equals(DateField.class)) {
                 throw new InvalidFieldException();
             }
         }
 
+        Connection conn = DAO.getConnection();
+
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate("drop table " + this.tableName);
+        } catch (SQLException e) {
+            //do nothing an hope it's 'cause table does not exist
+            System.out.println("*");
+        }
+
         try {
             String query = createTableQuery(fields);
-            System.out.println(query);
+            if (stmt!=null){
+                System.out.println(query);
+                stmt.executeUpdate(query);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e);
         }
+
 
     }
 
@@ -59,7 +81,7 @@ public class Mapper {
     private String primaryClause(boolean isPrimary, Field field) {
 
         if (isPrimary) {
-            return field.getName();
+            return field.getName() + ",";
         } else {
             return "";
         }
@@ -81,42 +103,38 @@ public class Mapper {
         if (defaultText.equals("")) {
             return "";
         }
-        return " default ('" + defaultText + "')";
+        return " default '" + defaultText + "'";
     }
 
     //only for numeric
 
     private String defaultNumericClause(double defaultValue) {
 
-        if(defaultValue == Double.NaN) {
+        if(Double.isNaN(defaultValue)) {
             return "";
         }
-        return " default (" + defaultValue + ")";
+        return " default " + defaultValue + "";
     }
 
     //only for date
 
-    private String defaultDateClause(String defaultDate) {
+    /*private String formatDateClause(String format) {
 
-        String dateStamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-        if (defaultDate.equals(dateStamp)) {
+        return " format '" + format + "'";
+
+    }*/
+
+    private String defaultDateClause(String format, String defaultDate) {
+
+        if (format.equals("") && defaultDate.equals("")) {
             return "";
         }
-        return " default ('" + defaultDate + "')";
+
+        //default (to_date('01-01-2001', 'dd-mm-yyyy'))
+
+        return " default (to_date('" + defaultDate + "', '" + format + "'))";
     }
 
-    //only for time
-
-    private String defaultTimeClause(String defaultTime) {
-
-        String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-        if (defaultTime.equals(timeStamp)) {
-            return "";
-        }
-        return " default ('" + defaultTime + "')";
-    }
-
-    /////create for others here////
 
     /*
       CREATING FINAL QUERY
@@ -133,41 +151,35 @@ public class Mapper {
 
                 field.setAccessible(true);
                 VarcharField fieldValue = (VarcharField) field.get(this.table);
-                query.append(field.getName()).append(" varchar(").append(fieldValue.getSize()).append(")");
+                query.append(field.getName()).append(" varchar(").append(fieldValue.getSize() + ")");
                 query.append(nullClause(fieldValue.isNullable()));
-                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field)).append(", ");
+                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append(defaultVarcharClause(fieldValue.getDefaultText()));
                 query.append(",");
+
             } else if (field.getType().equals(NumericField.class)) {
 
                 field.setAccessible(true);
                 NumericField fieldValue = (NumericField) field.get(this.table);
                 query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(")");
                 query.append(nullClause(fieldValue.isNullable()));
-                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field)).append(", ");
+                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
                 query.append(uniqueClause(fieldValue.isUnique()));
                 query.append(defaultNumericClause(fieldValue.getDefaultValue()));
                 query.append(",");
+
             } else if (field.getType().equals(DateField.class)) {
 
                 field.setAccessible(true);
                 DateField fieldValue = (DateField) field.get(this.table);
                 query.append(field.getName()).append(" date");
                 query.append(nullClause(fieldValue.isNullable()));
-                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field)).append(", ");
+                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
                 query.append(uniqueClause(fieldValue.isUnique()));
-                query.append((defaultDateClause(fieldValue.getDefaultValue())));
-                query.append(",");
-            } else if (field.getType().equals(TimeField.class)) {
-
-                field.setAccessible(true);
-                TimeField fieldValue = (TimeField) field.get(this.table);
-                query.append(field.getName()).append(" time");
-                query.append(nullClause(fieldValue.isNullable()));
-                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field)).append(",");
-                query.append(uniqueClause(fieldValue.isUnique()));
-                query.append((defaultTimeClause(fieldValue.getDefaultValue())));
+                //query.append(formatDateClause(fieldValue.getFormat()));
+                query.append((defaultDateClause(fieldValue.getFormat(),
+                        fieldValue.getDefaultDate())));
                 query.append(",");
             }
             query.append("\n");
@@ -176,7 +188,7 @@ public class Mapper {
         //delete the last comma
         primaryKeys.deleteCharAt(primaryKeys.length() - 1);
         query.append(primaryKeys.append(")\n"));
-        query.append(");");
+        query.append(")");
         return query.toString();
     }
 
