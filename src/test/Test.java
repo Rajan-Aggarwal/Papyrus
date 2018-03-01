@@ -28,15 +28,29 @@ class Student {
     }
 }
 
+///Testing
+
+//solves two things:
+    //1. Programmer can't go wrong with field mismatches
+    //2. Have different names for foreign keys!
+
+
+class Instructor {
+    NumericField iid = new NumericField(3, 2, true, true);
+    ForeignKeyField name = new ForeignKeyField(new Student());
+}
+
+
 public class Test {
     public static void main(String[] args) {
         try {
             Mapper mapper = new Mapper(new Student());
+            Mapper m2 = new Mapper(new Instructor());
         } catch (InvalidFieldException e) {
             System.out.println("Invalid Field");
         }
 
-        //Connection conn = DAO.getConnection();
+//        Connection conn = DAO.getConnection();
 
     }
 }

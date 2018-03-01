@@ -2,6 +2,7 @@ package mapper;
 
 import database.DAO;
 import fields.*;
+import fields.ForeignKeyField;
 //import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.lang.reflect.Field;
@@ -32,7 +33,7 @@ public class Mapper {
 
         for (Field field : fields) {
             if (!field.getType().equals(VarcharField.class) && !field.getType().equals(NumericField.class) &&
-            !field.getType().equals(DateField.class)) {
+            !field.getType().equals(DateField.class) && !field.getType().equals(ForeignKeyField.class)) {
                 throw new InvalidFieldException();
             }
         }
@@ -44,6 +45,7 @@ public class Mapper {
         try {
             stmt = conn.createStatement();
             stmt.executeUpdate("drop table " + this.tableName);
+            System.out.println("DROPPED");
         } catch (SQLException e) {
             //do nothing an hope it's 'cause table does not exist
             System.out.println("*");
@@ -135,6 +137,47 @@ public class Mapper {
         return " default (to_date('" + defaultDate + "', '" + format + "'))";
     }
 
+    private void getSimpleQuery(Field field, StringBuilder query, StringBuilder primaryKeys) throws IllegalAccessException {
+
+        if (field.getType().equals(VarcharField.class)) {
+
+            field.setAccessible(true);
+            VarcharField fieldValue = (VarcharField) field.get(this.table);
+            query.append(field.getName()).append(" varchar(").append(fieldValue.getSize() + ")");
+            query.append(nullClause(fieldValue.isNullable()));
+            primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
+            query.append(uniqueClause(fieldValue.isUnique()));
+            query.append(defaultVarcharClause(fieldValue.getDefaultText()));
+            query.append(",");
+
+        } else if (field.getType().equals(NumericField.class)) {
+
+            field.setAccessible(true);
+            NumericField fieldValue = (NumericField) field.get(this.table);
+            query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(")");
+            query.append(nullClause(fieldValue.isNullable()));
+            primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
+            query.append(uniqueClause(fieldValue.isUnique()));
+            query.append(defaultNumericClause(fieldValue.getDefaultValue()));
+            query.append(",");
+
+        } else if (field.getType().equals(DateField.class)) {
+
+            field.setAccessible(true);
+            DateField fieldValue = (DateField) field.get(this.table);
+            query.append(field.getName()).append(" date");
+            query.append(nullClause(fieldValue.isNullable()));
+            primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
+            query.append(uniqueClause(fieldValue.isUnique()));
+            //query.append(formatDateClause(fieldValue.getFormat()));
+            query.append((defaultDateClause(fieldValue.getFormat(),
+                    fieldValue.getDefaultDate())));
+            query.append(",");
+        }
+
+        query.append("\n");
+    }
+
 
     /*
       CREATING FINAL QUERY
@@ -144,49 +187,33 @@ public class Mapper {
 
         StringBuilder query = new StringBuilder("create table " + this.tableName + "(\n");
         StringBuilder primaryKeys = new StringBuilder("primary key(");
+        //boolean hasForeign = false;
+        //StringBuilder references = new StringBuilder(" references ")
 
         for (Field field : fields) {
 
-            if (field.getType().equals(VarcharField.class)) {
+            if (field.getType().equals(ForeignKeyField.class)) {
 
                 field.setAccessible(true);
-                VarcharField fieldValue = (VarcharField) field.get(this.table);
-                query.append(field.getName()).append(" varchar(").append(fieldValue.getSize() + ")");
-                query.append(nullClause(fieldValue.isNullable()));
-                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
-                query.append(uniqueClause(fieldValue.isUnique()));
-                query.append(defaultVarcharClause(fieldValue.getDefaultText()));
-                query.append(",");
+                ForeignKeyField fieldValue = (ForeignKeyField) field.get(this.table);
 
-            } else if (field.getType().equals(NumericField.class)) {
+                Object refObj = fieldValue.getReference(); //gets "Student"
 
-                field.setAccessible(true);
-                NumericField fieldValue = (NumericField) field.get(this.table);
-                query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(")");
-                query.append(nullClause(fieldValue.isNullable()));
-                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
-                query.append(uniqueClause(fieldValue.isUnique()));
-                query.append(defaultNumericClause(fieldValue.getDefaultValue()));
-                query.append(",");
+                StringBuilder foreignKey = new StringBuilder("foreign key (");
+                foreignKey.append(field.getName() + ") " + "references (" + refObj.getClass().getSimpleName());
 
-            } else if (field.getType().equals(DateField.class)) {
-
-                field.setAccessible(true);
-                DateField fieldValue = (DateField) field.get(this.table);
-                query.append(field.getName()).append(" date");
-                query.append(nullClause(fieldValue.isNullable()));
-                primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
-                query.append(uniqueClause(fieldValue.isUnique()));
-                //query.append(formatDateClause(fieldValue.getFormat()));
-                query.append((defaultDateClause(fieldValue.getFormat(),
-                        fieldValue.getDefaultDate())));
-                query.append(",");
+                Field foreignField = fieldValue.getClass().getDeclaredFields()[0];
+                //System.out.println("Foreign field = " + foreignField);
+                getSimpleQuery(foreignField, query, primaryKeys);
+                query.append(foreignKey.append("),\n"));
             }
-            query.append("\n");
+            else { getSimpleQuery (field, query, primaryKeys); }
+
         }
 
         //delete the last comma
         primaryKeys.deleteCharAt(primaryKeys.length() - 1);
+
         query.append(primaryKeys.append(")\n"));
         query.append(")");
         return query.toString();
