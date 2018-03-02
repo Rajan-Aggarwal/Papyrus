@@ -1,6 +1,6 @@
 package mapper;
 
-public class InvalidTableDescriptionException extends Exception {
+public class InvalidTableDescriptionException extends MapperException {
     private String sqlException;
     public InvalidTableDescriptionException(String sqlException) {
         this.sqlException = sqlException;

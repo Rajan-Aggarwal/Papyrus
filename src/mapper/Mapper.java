@@ -19,6 +19,8 @@ import scroll.*;
 
 public class Mapper {
 
+    //static int counter = 0;
+
     private Scroll table;
     private String tableName;
     private Field[] fields;
@@ -26,8 +28,10 @@ public class Mapper {
     /*
         CONSTRUCTOR and CREATING THE TABLE
      */
+
     public Mapper(Scroll tableObj) throws InvalidFieldException, InvalidTableDescriptionException {
 
+        //counter++;
         this.table = tableObj;
         this.tableName = table.getClass().getSimpleName();
         fields = table.getClass().getDeclaredFields();
@@ -45,8 +49,8 @@ public class Mapper {
 
         try {
             stmt = conn.createStatement();
-            stmt.executeUpdate("drop table " + this.tableName);
-            System.out.println("DROPPED");
+            stmt.executeUpdate("drop table " + this.tableName + " cascade constraints");
+            //System.out.println("DROPPED");
         } catch (SQLException e) {
             //do nothing an hope it's 'cause table does not exist
             System.out.println("*");
@@ -62,6 +66,8 @@ public class Mapper {
             e.printStackTrace();
         } catch (SQLException e) {
             throw new InvalidTableDescriptionException(e.getMessage());
+        } catch (InvalidForeignKeyReferenceException e) {
+            e.printStackTrace();
         }
 
 
@@ -83,10 +89,10 @@ public class Mapper {
 
     }
 
-    private String primaryClause(boolean isPrimary, Field field) {
+    private String primaryClause(boolean isPrimary, String fieldName) {
 
         if (isPrimary) {
-            return field.getName() + ",";
+            return fieldName + ",";
         } else {
             return "";
         }
@@ -140,15 +146,15 @@ public class Mapper {
         return " default (to_date('" + defaultDate + "', '" + format + "'))";
     }
 
-    private void getSimpleQuery(Field field, StringBuilder query, StringBuilder primaryKeys) throws IllegalAccessException {
+    private void getSimpleQuery(Field field, String fieldName, StringBuilder query, StringBuilder primaryKeys, Scroll tableObj) throws IllegalAccessException {
 
         if (field.getType().equals(VarcharField.class)) {
 
             field.setAccessible(true);
-            VarcharField fieldValue = (VarcharField) field.get(this.table);
-            query.append(field.getName()).append(" varchar(").append(fieldValue.getSize() + ")");
+            VarcharField fieldValue = (VarcharField) field.get(tableObj);
+            query.append(fieldName).append(" varchar(").append(fieldValue.getSize() + ")");
             query.append(nullClause(fieldValue.isNullable()));
-            primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
+            primaryKeys.append(primaryClause(fieldValue.isPrimary(), fieldName));
             query.append(uniqueClause(fieldValue.isUnique()));
             query.append(defaultVarcharClause(fieldValue.getDefaultText()));
             query.append(",");
@@ -156,10 +162,10 @@ public class Mapper {
         } else if (field.getType().equals(NumericField.class)) {
 
             field.setAccessible(true);
-            NumericField fieldValue = (NumericField) field.get(this.table);
-            query.append(field.getName()).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(")");
+            NumericField fieldValue = (NumericField) field.get(tableObj);
+            query.append(fieldName).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(")");
             query.append(nullClause(fieldValue.isNullable()));
-            primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
+            primaryKeys.append(primaryClause(fieldValue.isPrimary(), fieldName));
             query.append(uniqueClause(fieldValue.isUnique()));
             query.append(defaultNumericClause(fieldValue.getDefaultValue()));
             query.append(",");
@@ -167,10 +173,10 @@ public class Mapper {
         } else if (field.getType().equals(DateField.class)) {
 
             field.setAccessible(true);
-            DateField fieldValue = (DateField) field.get(this.table);
-            query.append(field.getName()).append(" date");
+            DateField fieldValue = (DateField) field.get(tableObj);
+            query.append(fieldName).append(" date");
             query.append(nullClause(fieldValue.isNullable()));
-            primaryKeys.append(primaryClause(fieldValue.isPrimary(), field));
+            primaryKeys.append(primaryClause(fieldValue.isPrimary(), fieldName));
             query.append(uniqueClause(fieldValue.isUnique()));
             //query.append(formatDateClause(fieldValue.getFormat()));
             query.append((defaultDateClause(fieldValue.getFormat(),
@@ -187,7 +193,7 @@ public class Mapper {
       CREATING FINAL QUERY
      */
 
-    private String createTableQuery(Field[] fields) throws IllegalAccessException {
+    private String createTableQuery(Field[] fields) throws IllegalAccessException, InvalidForeignKeyReferenceException {
 
         StringBuilder query = new StringBuilder("create table " + this.tableName + "(\n");
         StringBuilder primaryKeys = new StringBuilder("primary key(");
@@ -204,12 +210,33 @@ public class Mapper {
 
                 ForeignKeyField fk = new ForeignKeyField(new Student());
 
-                */
+                1. You need the object of student() ---> refObj
+                2. You need the field of that object() ---> off of that object get the fields and
+                    search for the name of that field!!
+                    Fields[] refFields = refObj.getClass().getDeclaredFields()
+                    for (Field f:refFields) {
+                        if (f.getName().equals("name")) return f;
+                    }
 
+                */
+                field.setAccessible(true);
+                ForeignKeyField fieldValue = (ForeignKeyField) field.get(this.table);
+                if (fieldValue.getFieldNotFound()) {
+                    throw new InvalidForeignKeyReferenceException();
+                }
+                getSimpleQuery(fieldValue.getRefField(), field.getName(), query, primaryKeys,
+                                fieldValue.getRefObject());
+
+                StringBuilder foreignKey = new StringBuilder("foreign key (");
+                foreignKey.append(field.getName() + ") references " + fieldValue.getRefName());
+                foreignKey.append(" on delete cascade");
+                foreignKey.append(",\n");
+
+                query.append(foreignKey);
 
             }
 
-            else { getSimpleQuery (field, query, primaryKeys); }
+            else { getSimpleQuery (field, field.getName(), query, primaryKeys, this.table); }
 
         }
 
@@ -220,5 +247,9 @@ public class Mapper {
 
         return query.toString();
     }
+
+    /*private Field getForeignFieldFromString() {
+
+    }*/
 
 }
