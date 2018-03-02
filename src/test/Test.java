@@ -5,27 +5,29 @@ import fields.*;
 
 import mapper.InvalidFieldException;
 import mapper.Mapper;
+import ruler.Ruler;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.Time;
 import java.text.ParseException;
+import java.util.HashMap;
 
 class Student {
 
 //    TimeField name;
     VarcharField name = new VarcharField( 5, true, true);
-    NumericField name1 = new NumericField( 5, 5, true, true);
-    DateField d1;
-
-
-    {
-        try {
-            d1 = new DateField("yyyy-MM-dd", "2012-06-23", true, true);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
+    NumericField name1 = new NumericField( 10, 6, true, false);
+//    DateField d1;
+//
+//
+//    {
+//        try {
+//            d1 = new DateField("yyyy-MM-dd", "2012-06-23", true, false);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
 
 ///Testing
@@ -45,7 +47,16 @@ public class Test {
     public static void main(String[] args) {
         try {
             Mapper mapper = new Mapper(new Student());
-            Mapper m2 = new Mapper(new Instructor());
+            Ruler ruler = new Ruler(new Student());
+            HashMap<String, Object> tuple = new HashMap<>();
+            tuple.put("name","'Vis'");
+            tuple.put("name1", 50.0);
+            ruler.insert(tuple);
+            tuple.clear();
+            tuple.put("name","'LOL'");
+            tuple.put("name1", 35.0);
+            ruler.insert(tuple);
+//            Mapper m2 = new Mapper(new Instructor());
         } catch (InvalidFieldException e) {
             System.out.println("Invalid Field");
         }
