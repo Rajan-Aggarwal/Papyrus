@@ -6,6 +6,7 @@ import fields.*;
 import mapper.InvalidFieldException;
 import mapper.Mapper;
 import ruler.Ruler;
+import scroll.Scroll;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.util.HashMap;
 
-class Student {
+class Student extends Scroll {
 
 //    TimeField name;
     VarcharField name = new VarcharField( 5, true, true);
@@ -37,7 +38,7 @@ class Student {
     //2. Have different names for foreign keys!
 
 
-class Instructor {
+class Instructor extends Scroll {
     NumericField iid = new NumericField(3, 2, true, true);
     ForeignKeyField name = new ForeignKeyField(new Student());
 }
@@ -56,7 +57,7 @@ public class Test {
             tuple.put("name","'LOL'");
             tuple.put("name1", 35.0);
             ruler.insert(tuple);
-//            Mapper m2 = new Mapper(new Instructor());
+           //Mapper m2 = new Mapper(new Instructor());
         } catch (InvalidFieldException e) {
             System.out.println("Invalid Field");
         }

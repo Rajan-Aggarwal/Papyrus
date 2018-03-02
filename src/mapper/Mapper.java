@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import scroll.*;
 
 /*
     The ORM engine
@@ -18,14 +19,14 @@ import java.util.Calendar;
 
 public class Mapper {
 
-    private Object table;
+    private Scroll table;
     private String tableName;
     private Field[] fields;
 
     /*
         CONSTRUCTOR and CREATING THE TABLE
      */
-    public Mapper(Object tableObj) throws InvalidFieldException {
+    public Mapper(Scroll tableObj) throws InvalidFieldException {
 
         this.table = tableObj;
         this.tableName = table.getClass().getSimpleName();

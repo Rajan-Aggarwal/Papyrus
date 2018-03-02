@@ -8,15 +8,16 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import database.DAO;
+import scroll.Scroll;
 
 public class Ruler {
-    private Object table;
+    private Scroll table;
     private String tableName;
     private Field[] fields;
 
-    public Ruler (Object tableObj) {
+    public Ruler (Scroll tableObj) {
 
-        this.table = table;
+        this.table = tableObj;
         this.tableName = tableObj.getClass().getSimpleName();
         this.fields = tableObj.getClass().getDeclaredFields();
     }
