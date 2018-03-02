@@ -1,3 +1,3 @@
-# javaORM
+# Papyrus
 
-An object relational mapper in Java
+An object relational mapper in Java. U
