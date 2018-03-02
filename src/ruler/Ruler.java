@@ -22,7 +22,7 @@ public class Ruler {
         this.fields = tableObj.getClass().getDeclaredFields();
     }
 
-    public void insert (HashMap<String, Object> tuple) {
+    public void insert (HashMap<String, Object> tuple) throws InvalidInsertionException {
 
         Connection conn = DAO.getConnection();
         Statement stmt = null;
@@ -41,7 +41,7 @@ public class Ruler {
             stmt.executeUpdate(insertQuery.toString());
             System.out.println("INSERTED");
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e);
+            throw new InvalidInsertionException(e.getMessage());
         }
     }
 }

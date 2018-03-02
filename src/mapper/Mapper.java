@@ -26,7 +26,7 @@ public class Mapper {
     /*
         CONSTRUCTOR and CREATING THE TABLE
      */
-    public Mapper(Scroll tableObj) throws InvalidFieldException {
+    public Mapper(Scroll tableObj) throws InvalidFieldException, InvalidTableDescriptionException {
 
         this.table = tableObj;
         this.tableName = table.getClass().getSimpleName();
@@ -61,7 +61,7 @@ public class Mapper {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e);
+            throw new InvalidTableDescriptionException(e.getMessage());
         }
 
 
@@ -78,7 +78,9 @@ public class Mapper {
         if (isNullable) {
             return "";
         }
+
         return " not null";
+
     }
 
     private String primaryClause(boolean isPrimary, Field field) {
@@ -174,6 +176,7 @@ public class Mapper {
             query.append((defaultDateClause(fieldValue.getFormat(),
                     fieldValue.getDefaultDate())));
             query.append(",");
+
         }
 
         query.append("\n");
@@ -195,28 +198,26 @@ public class Mapper {
 
             if (field.getType().equals(ForeignKeyField.class)) {
 
-                field.setAccessible(true);
-                ForeignKeyField fieldValue = (ForeignKeyField) field.get(this.table);
+                /*
 
-                Object refObj = fieldValue.getReference(); //gets "Student"
+                getSimpleQuery takes in a field value with sb query and primary keys
 
-                StringBuilder foreignKey = new StringBuilder("foreign key (");
-                foreignKey.append(field.getName() + ") " + "references (" + refObj.getClass().getSimpleName());
+                ForeignKeyField fk = new ForeignKeyField(new Student());
 
-                Field foreignField = fieldValue.getClass().getDeclaredFields()[0];
-                //System.out.println("Foreign field = " + foreignField);
-                getSimpleQuery(foreignField, query, primaryKeys);
-                query.append(foreignKey.append("),\n"));
+                */
+
+
             }
+
             else { getSimpleQuery (field, query, primaryKeys); }
 
         }
 
         //delete the last comma
         primaryKeys.deleteCharAt(primaryKeys.length() - 1);
-
         query.append(primaryKeys.append(")\n"));
         query.append(")");
+
         return query.toString();
     }
 

@@ -4,7 +4,9 @@ import database.DAO;
 import fields.*;
 
 import mapper.InvalidFieldException;
+import mapper.InvalidTableDescriptionException;
 import mapper.Mapper;
+import ruler.InvalidInsertionException;
 import ruler.Ruler;
 import scroll.Scroll;
 
@@ -45,9 +47,13 @@ class Instructor extends Scroll {
 
 
 public class Test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidTableDescriptionException, InvalidInsertionException {
         try {
+
+            //model file
             Mapper mapper = new Mapper(new Student());
+
+            //controller file
             Ruler ruler = new Ruler(new Student());
             HashMap<String, Object> tuple = new HashMap<>();
             tuple.put("name","'Vis'");
