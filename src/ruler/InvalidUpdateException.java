@@ -1,11 +1,16 @@
 package ruler;
 
-public class InvalidInsertionException extends Exception{
+public class InvalidUpdateException extends RulerException{
+
     private String sqlException;
-    public InvalidInsertionException(String sqlException) {
+
+    public InvalidUpdateException(String sqlException) {
+
         this.sqlException = sqlException;
     }
+
     public String toString() {
+
         return sqlException;
     }
 }

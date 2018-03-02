@@ -1,26 +1,21 @@
 package test;
 
-import database.DAO;
 import fields.*;
 
 import mapper.InvalidFieldException;
 import mapper.InvalidTableDescriptionException;
 import mapper.Mapper;
-import ruler.InvalidInsertionException;
-import ruler.Ruler;
+import ruler.*;
 import scroll.Scroll;
 
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.Time;
-import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 class Student extends Scroll {
 
 //    TimeField name;
     VarcharField name = new VarcharField( 5, true, true);
-    NumericField name1 = new NumericField( 10, 6, true, false);
+    NumericField marks = new NumericField( 10, 6, true, false);
 //    DateField d1;
 //
 //
@@ -47,7 +42,7 @@ class Instructor extends Scroll {
 
 
 public class Test {
-    public static void main(String[] args) throws InvalidTableDescriptionException, InvalidInsertionException {
+    public static void main(String[] args) throws InvalidTableDescriptionException, RulerException {
         try {
 
             //model file
@@ -57,13 +52,37 @@ public class Test {
             Ruler ruler = new Ruler(new Student());
             HashMap<String, Object> tuple = new HashMap<>();
             tuple.put("name","'Vis'");
-            tuple.put("name1", 50.0);
+            tuple.put("marks", 50.1);
             ruler.insert(tuple);
             tuple.clear();
             tuple.put("name","'LOL'");
-            tuple.put("name1", 35.0);
+            tuple.put("marks", 35.1);
             ruler.insert(tuple);
-           //Mapper m2 = new Mapper(new Instructor());
+
+            HashMap<String, Object> updates = new HashMap<>();
+            updates.put("marks","100");
+
+            HashMap<String, Object> where = new HashMap<>();
+            where.put("name", "'Vis'");
+            where.put("marks", 50.1);
+
+            ruler.update(updates, where);
+
+            HashMap<String, ArrayList<Object>> row = ruler.selectAll();
+
+            for (HashMap.Entry<String, ArrayList<Object>> entry:row.entrySet()) {
+                ArrayList<Object> values = entry.getValue();
+                for (Object obj:values) {
+                    System.out.println(obj);
+                }
+            }
+
+            HashMap<String, Object> where1 = new HashMap<>();
+            where1.put("name", "'LOL'");
+            where1.put("marks", 35.1);
+
+            ruler.delete(where1);
+
         } catch (InvalidFieldException e) {
             System.out.println("Invalid Field");
         }
