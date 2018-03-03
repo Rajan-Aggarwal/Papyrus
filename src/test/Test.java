@@ -12,6 +12,7 @@ class Student extends Scroll {
 
     VarcharField id = new VarcharField(5,false, true);
     VarcharField name = new VarcharField( 10, false);
+    IntegerField marks = new IntegerField(10);
     DateField dob = new DateField(false);
 }
 

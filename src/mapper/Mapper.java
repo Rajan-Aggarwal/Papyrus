@@ -41,7 +41,8 @@ public class Mapper {
 
         for (Field field : fields) {
             if (!field.getType().equals(VarcharField.class) && !field.getType().equals(NumericField.class) &&
-            !field.getType().equals(DateField.class) && !field.getType().equals(ForeignKeyField.class)) {
+            !field.getType().equals(DateField.class) && !field.getType().equals(ForeignKeyField.class)
+                    && !field.getType().equals(IntegerField.class)) {
                 throw new InvalidFieldException();
             }
         }
@@ -132,12 +133,6 @@ public class Mapper {
 
     //only for date
 
-    /*private String formatDateClause(String format) {
-
-        return " format '" + format + "'";
-
-    }*/
-
     private String defaultDateClause(String format, String defaultDate) {
 
         if (format.equals("") && defaultDate.equals("")) {
@@ -147,6 +142,18 @@ public class Mapper {
         //default (to_date('01-01-2001', 'dd-mm-yyyy'))
 
         return " default (to_date('" + defaultDate + "', '" + format + "'))";
+    }
+
+    //only for integer
+
+    private String defaultIntClause(int defaultValue) {
+
+        if (defaultValue == Integer.MIN_VALUE) {
+            return "";
+        }
+
+        return " default " + defaultValue + "";
+
     }
 
     private void getSimpleQuery(Field field, String fieldName, StringBuilder query, StringBuilder primaryKeys, Scroll tableObj) throws IllegalAccessException {
@@ -183,6 +190,17 @@ public class Mapper {
                     fieldValue.getDefaultDate())));
             query.append(uniqueClause(fieldValue.isUnique()));
             //query.append(formatDateClause(fieldValue.getFormat()));
+            query.append(nullClause(fieldValue.isNullable()));
+            query.append(",");
+
+        } else if (field.getType().equals(IntegerField.class)) {
+
+            field.setAccessible(true);
+            IntegerField fieldValue = (IntegerField) field.get(tableObj);
+            query.append(fieldName).append(" int");
+            primaryKeys.append(primaryClause(fieldValue.isPrimary(), fieldName));
+            query.append(defaultIntClause(fieldValue.getDefaultInt()));
+            query.append(uniqueClause(fieldValue.isUnique()));
             query.append(nullClause(fieldValue.isNullable()));
             query.append(",");
 
