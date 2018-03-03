@@ -43,7 +43,6 @@ public class Test {
         Ruler student1 = new Ruler(new Student());
         Ruler instructor1 = new Ruler(new Instructor());
 
-
         HashMap<String, ArrayList<Object>> tuples = new HashMap<>();
         ArrayList<Object> one = new ArrayList<>();
         one.add("'1010'");
@@ -71,7 +70,7 @@ public class Test {
         three.add(1500);
         three.add(2000);
         tuples.put("iname", one);
-        tuples.put("id", two);
+        tuples.put("sid", two);
         tuples.put("salary", three);
         instructor1.insert(tuples, 2);
 

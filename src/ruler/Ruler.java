@@ -39,13 +39,21 @@ public class Ruler {
         Connection conn = DAO.getConnection();
 
         StringBuilder insertQuery = new StringBuilder("insert into " + this.tableName + " values (");
+        StringBuilder attributes = new StringBuilder(" (");
+        StringBuilder values = new StringBuilder(" values(");
 
         for (Field field:this.fields) {
-            insertQuery.append(tuple.get(field.getName())).append(",");
+            if(tuple.get(field.getName())!=null) {
+                attributes.append(field.getName()).append(",");
+                values.append(tuple.get(field.getName())).append(",");
+            }
         }
 
-        insertQuery.deleteCharAt(insertQuery.length() - 1);
-        insertQuery.append(")");
+        attributes.deleteCharAt(attributes.length()-1);
+        values.deleteCharAt(values.length()-1);
+        attributes.append(")");
+        values.append(")");
+        insertQuery.append(attributes).append(values);
 
         executeInsert(conn, insertQuery);
     }
@@ -63,14 +71,22 @@ public class Ruler {
         Connection conn = DAO.getConnection();
 
         for (int i=0;i<num;i++) {
-            StringBuilder insertQuery = new StringBuilder("insert into " + this.tableName + " values (");
+            StringBuilder insertQuery = new StringBuilder("insert into " + this.tableName);
+            StringBuilder attributes = new StringBuilder(" (");
+            StringBuilder values = new StringBuilder(" values(");
 
             for (Field field:this.fields) {
-                insertQuery.append(tuples.get(field.getName()).get(i)).append(",");
+                if(tuples.get(field.getName())!=null) {
+                    attributes.append(field.getName()).append(",");
+                    values.append(tuples.get(field.getName()).get(i)).append(",");
+                }
             }
 
-            insertQuery.deleteCharAt(insertQuery.length() - 1);
-            insertQuery.append(")");
+            attributes.deleteCharAt(attributes.length()-1);
+            values.deleteCharAt(values.length()-1);
+            attributes.append(")");
+            values.append(")");
+            insertQuery.append(attributes).append(values);
 
             executeInsert(conn, insertQuery);
         }
