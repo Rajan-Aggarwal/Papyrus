@@ -1,10 +1,9 @@
 package database;
 import java.sql.*;
 
-public class DAO
-{
-    private static Connection conn = null;
+public class DAO {
 
+    private static Connection conn = null;
     public static Connection getConnection() {
 
         try {
@@ -17,8 +16,5 @@ public class DAO
         }
 
         return conn;
-
     }
-
-
 }

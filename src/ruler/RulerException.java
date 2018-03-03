@@ -1,5 +1,5 @@
 package ruler;
 
-public class RulerException extends Exception {
+public abstract class RulerException extends Exception {
 
 }

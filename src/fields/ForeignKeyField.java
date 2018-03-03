@@ -1,14 +1,11 @@
 package fields;
 
-import mapper.InvalidForeignKeyReferenceException;
 import scroll.Scroll;
-
 import java.lang.reflect.Field;
 
 public class ForeignKeyField extends ColumnField {
 
     private Scroll refObject;
-    //private String refAttribute;
     private Field refField;
     private boolean fieldNotFound;
     private String refName;
@@ -25,26 +22,25 @@ public class ForeignKeyField extends ColumnField {
                 this.refField = f;
             }
         }
-
     }
 
     public boolean getFieldNotFound() {
+
         return this.fieldNotFound;
     }
 
     public Scroll getRefObject() {
+
         return this.refObject;
     }
 
-    /*public String getRefAttribute() {
-        return refAttribute;
-    }*/
-
     public Field getRefField() {
+
         return this.refField;
     }
 
     public String getRefName() {
+
         return this.refName;
     }
 }

@@ -1,7 +1,6 @@
 package fields;
 
 import java.text.ParseException;
-import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,10 +21,8 @@ public class DateField extends ColumnField {
 
         super(args);
         this.format = format;
-        //to check the validity of date string --> parse exception is thrown otherwise
         Date date = new SimpleDateFormat(this.format).parse(defaultDate);
         this.defaultDate = defaultDate;
-
     }
 
     public String getDate() {
@@ -36,12 +33,10 @@ public class DateField extends ColumnField {
     public String getDefaultDate() {
 
         return defaultDate;
-
     }
 
     public String getFormat() {
 
         return this.format;
-
     }
 }

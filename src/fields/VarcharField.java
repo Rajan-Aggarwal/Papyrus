@@ -3,14 +3,13 @@ package fields;
 public class VarcharField extends ColumnField {
 
     private String defaultText;
-    private int size; //necessary
+    private int size;
 
     public VarcharField(int size, boolean ... args)  {
 
         super(args);
         this.size = size;
-        this.defaultText = ""; //see Mapper implementation
-
+        this.defaultText = "";
     }
 
     public VarcharField(int size, String defaultText, boolean ... args) {
@@ -18,7 +17,6 @@ public class VarcharField extends ColumnField {
         super(args);
         this.size = size;
         this.defaultText = defaultText;
-
     }
 
     public String getDefaultText() {

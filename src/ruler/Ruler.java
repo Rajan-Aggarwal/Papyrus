@@ -11,13 +11,11 @@ import scroll.Scroll;
 import java.sql.ResultSet;
 
 public class Ruler {
-    private Scroll table;
     private String tableName;
     private Field[] fields;
 
     public Ruler (Scroll tableObj) {
 
-        this.table = tableObj;
         this.tableName = tableObj.getClass().getSimpleName();
         this.fields = tableObj.getClass().getDeclaredFields();
     }
@@ -181,10 +179,7 @@ public class Ruler {
 
         Connection conn = DAO.getConnection();
 
-        StringBuilder deleteQuery = new StringBuilder("delete from ");
-        deleteQuery.append(this.tableName);
-
-        executeUpdate(conn, deleteQuery.toString());
+        executeUpdate(conn, "delete from " + this.tableName);
     }
 
     public void delete(HashMap<String, Object> where) throws InvalidUpdateException {

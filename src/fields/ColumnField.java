@@ -10,9 +10,6 @@ public abstract class ColumnField {
     private boolean isPrimary = false;
     private boolean isUnique = false;
 
-    //leave it for now on. we'll look into it
-    //private boolean isForeign;
-
     ColumnField (boolean ... args) {
 
         if (args.length>=1) {
@@ -40,10 +37,4 @@ public abstract class ColumnField {
 
         return isUnique;
     }
-
-
-    /*public boolean isForeign() {
-        return isForeign;
-    }*/
-
 }

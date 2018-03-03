@@ -12,7 +12,6 @@ public class NumericField extends ColumnField {
         this.size = size;
         this.precision = precision;
         this.defaultValue = Double.NaN;
-
     }
 
     public NumericField(int size, int precision, double defaultValue, boolean ... args){
@@ -21,7 +20,6 @@ public class NumericField extends ColumnField {
         this.size = size;
         this.precision = precision;
         this.defaultValue = defaultValue;
-
     }
 
     public double getDefaultValue() {
