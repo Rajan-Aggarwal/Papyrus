@@ -1,5 +1,4 @@
 .idea/
 *.iml
 javaORM.iml
-src/test/*.java
 *.class
