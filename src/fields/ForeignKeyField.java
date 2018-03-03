@@ -13,6 +13,7 @@ public class ForeignKeyField extends ColumnField {
     private Field refField;
     private boolean fieldNotFound;
     private String refName;
+    private String refAttribute;
 
     /**
      * Constructor used to store metadata to create foreign key query.
@@ -24,6 +25,7 @@ public class ForeignKeyField extends ColumnField {
         this.refObject = refObject;
         Field[] fields = refObject.getClass().getDeclaredFields();
         this.refName = refObject.getClass().getSimpleName();
+        this.refAttribute = refAttribute;
         this.fieldNotFound = true;
         for (Field f : fields) {
             if (f.getName().equals(refAttribute)) {
@@ -67,5 +69,15 @@ public class ForeignKeyField extends ColumnField {
     public String getRefName() {
 
         return this.refName;
+    }
+
+    /**
+     * Getter for the name of the referenced field name of the referenced class
+     */
+
+    public String getRefAttribute() {
+
+        return this.refAttribute;
+
     }
 }

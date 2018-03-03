@@ -25,7 +25,7 @@ class Student extends Scroll {
 class Instructor extends Scroll {
 
     VarcharField iname = new VarcharField(10, false);
-    ForeignKeyField id = new ForeignKeyField(new Student(), "id");
+    ForeignKeyField sid = new ForeignKeyField(new Student(), "id");
     NumericField salary = new NumericField(6, 2,false, false, true);
 }
 
@@ -33,118 +33,115 @@ class Instructor extends Scroll {
 public class Test {
 
     public static void main(String[] args) throws MapperException, RulerException {
-        try{
 
-            // Test create query
-            Mapper student = new Mapper(new Student());
-            Mapper instructor = new Mapper(new Instructor());
+        // Test create query
+        Mapper student = new Mapper(new Student());
+        Mapper instructor = new Mapper(new Instructor());
 
-            // Test insert query
-            Ruler student1 = new Ruler(new Student());
-            Ruler instructor1 = new Ruler(new Instructor());
+        // Test insert query
+        Ruler student1 = new Ruler(new Student());
+        Ruler instructor1 = new Ruler(new Instructor());
 
 
-            HashMap<String, ArrayList<Object>> tuples = new HashMap<>();
-            ArrayList<Object> one = new ArrayList<>();
-            one.add("'1010'");
-            one.add("'1011'");
-            ArrayList<Object> two = new ArrayList<>();
-            two.add("'Tom'");
-            two.add("'Matt'");
-            ArrayList<Object> three = new ArrayList<>();
-            three.add("'17-03-1998'");
-            three.add("'11-04-1990'");
-            tuples.put("id", one);
-            tuples.put("name",two);
-            tuples.put("dob",three);
-            student1.insert(tuples,2);
+        HashMap<String, ArrayList<Object>> tuples = new HashMap<>();
+        ArrayList<Object> one = new ArrayList<>();
+        one.add("'1010'");
+        one.add("'1011'");
+        ArrayList<Object> two = new ArrayList<>();
+        two.add("'Tom'");
+        two.add("'Matt'");
+        ArrayList<Object> three = new ArrayList<>();
+        three.add("'17-03-1998'");
+        three.add("'11-04-1990'");
+        tuples.put("id", one);
+        tuples.put("name", two);
+        tuples.put("dob", three);
+        student1.insert(tuples, 2);
 
-            tuples.clear();
-            one.clear();
-            two.clear();
-            three.clear();
+        tuples.clear();
+        one.clear();
+        two.clear();
+        three.clear();
 
-            one.add("'John'");
-            one.add("'Jake'");
-            two.add("'1010'");
-            two.add("'1011'");
-            three.add(1500);
-            three.add(2000);
-            tuples.put("iname", one);
-            tuples.put("id", two);
-            tuples.put("salary", three);
-            instructor1.insert(tuples, 2);
+        one.add("'John'");
+        one.add("'Jake'");
+        two.add("'1010'");
+        two.add("'1011'");
+        three.add(1500);
+        three.add(2000);
+        tuples.put("iname", one);
+        tuples.put("id", two);
+        tuples.put("salary", three);
+        instructor1.insert(tuples, 2);
 
-            //Test select
-            HashMap<String, ArrayList<Object>> rows = student1.selectAll();
+        //Test select
+        HashMap<String, ArrayList<Object>> rows = student1.selectAll();
 
-            for (HashMap.Entry<String, ArrayList<Object>> entry:rows.entrySet()) {
-                ArrayList<Object> values = entry.getValue();
-                for (Object obj:values) {
-                    System.out.print(obj + " ");
-                }
-                System.out.println();
+        for (HashMap.Entry<String, ArrayList<Object>> entry : rows.entrySet()) {
+            ArrayList<Object> values = entry.getValue();
+            for (Object obj : values) {
+                System.out.print(obj + " ");
             }
-
             System.out.println();
+        }
 
-            rows.clear();
+        System.out.println();
 
-            HashMap<String, Object> where = new HashMap<>();
-            where.put("salary", 1500);
+        rows.clear();
 
-            rows = instructor1.selectAll(where);
+        HashMap<String, Object> where = new HashMap<>();
+        where.put("salary", 1500);
 
-            for (HashMap.Entry<String, ArrayList<Object>> entry:rows.entrySet()) {
-                ArrayList<Object> values = entry.getValue();
-                for (Object obj:values) {
-                    System.out.print(obj + " ");
-                }
-                System.out.println();
+        rows = instructor1.selectAll(where);
+
+        for (HashMap.Entry<String, ArrayList<Object>> entry : rows.entrySet()) {
+            ArrayList<Object> values = entry.getValue();
+            for (Object obj : values) {
+                System.out.print(obj + " ");
             }
-
             System.out.println();
+        }
 
-            //Test update
-            HashMap<String, Object> updates = new HashMap<>();
-            updates.put("salary","2500");
+        System.out.println();
 
-            instructor1.update(updates, where);
+        //Test update
+        HashMap<String, Object> updates = new HashMap<>();
+        updates.put("salary", "2500");
 
-            rows = instructor1.selectAll();
+        instructor1.update(updates, where);
 
-            for (HashMap.Entry<String, ArrayList<Object>> entry:rows.entrySet()) {
-                ArrayList<Object> values = entry.getValue();
-                for (Object obj:values) {
-                    System.out.print(obj + " ");
-                }
-                System.out.println();
+        rows = instructor1.selectAll();
+
+        for (HashMap.Entry<String, ArrayList<Object>> entry : rows.entrySet()) {
+            ArrayList<Object> values = entry.getValue();
+            for (Object obj : values) {
+                System.out.print(obj + " ");
             }
-
             System.out.println();
+        }
 
-            //Test delete
-            where.clear();
-            where.put("salary", 2000);
+        System.out.println();
 
-            instructor1.delete(where);
+        //Test delete
+        where.clear();
+        where.put("salary", 2000);
 
-            rows = instructor1.selectAll();
+        instructor1.delete(where);
 
-            for (HashMap.Entry<String, ArrayList<Object>> entry:rows.entrySet()) {
-                ArrayList<Object> values = entry.getValue();
-                for (Object obj:values) {
-                    System.out.print(obj + " ");
-                }
-                System.out.println();
+        rows = instructor1.selectAll();
+
+        for (HashMap.Entry<String, ArrayList<Object>> entry : rows.entrySet()) {
+            ArrayList<Object> values = entry.getValue();
+            for (Object obj : values) {
+                System.out.print(obj + " ");
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println();
         }
     }
 }
-
+//        }
+//}
+//
 //public class Test {
 //    public static void main(String[] args) throws MapperException, RulerException {
 //        try {
@@ -195,4 +192,4 @@ public class Test {
 //
 //    }
 //}
-
+////

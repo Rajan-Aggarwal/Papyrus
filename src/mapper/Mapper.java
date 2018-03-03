@@ -204,21 +204,7 @@ public class Mapper {
 
             if (field.getType().equals(ForeignKeyField.class)) {
 
-                /*
 
-                getSimpleQuery takes in a field value with sb query and primary keys
-
-                ForeignKeyField fk = new ForeignKeyField(new Student());
-
-                1. You need the object of student() ---> refObj
-                2. You need the field of that object() ---> off of that object get the fields and
-                    search for the name of that field!!
-                    Fields[] refFields = refObj.getClass().getDeclaredFields()
-                    for (Field f:refFields) {
-                        if (f.getName().equals("name")) return f;
-                    }
-
-                */
                 field.setAccessible(true);
                 ForeignKeyField fieldValue = (ForeignKeyField) field.get(this.table);
                 if (fieldValue.getFieldNotFound()) {
@@ -229,6 +215,7 @@ public class Mapper {
 
                 StringBuilder foreignKey = new StringBuilder("foreign key (");
                 foreignKey.append(field.getName() + ") references " + fieldValue.getRefName());
+                foreignKey.append(" (" + fieldValue.getRefAttribute() + ")");
                 foreignKey.append(" on delete cascade");
                 foreignKey.append(",\n");
 
