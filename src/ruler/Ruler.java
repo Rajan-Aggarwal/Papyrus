@@ -33,12 +33,24 @@ public class Ruler {
         insertQuery.deleteCharAt(insertQuery.length() - 1);
         insertQuery.append(")");
 
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(insertQuery.toString());
-            System.out.println("INSERTED");
-        } catch (SQLException e) {
-            throw new InvalidUpdateException(e.getMessage());
+        executeInsert(conn, insertQuery);
+    }
+
+    public void insert (HashMap<String, ArrayList<Object>> tuples, int num) throws InvalidUpdateException {
+
+        Connection conn = DAO.getConnection();
+
+        for (int i=0;i<num;i++) {
+            StringBuilder insertQuery = new StringBuilder("insert into " + this.tableName + " values (");
+
+            for (Field field:this.fields) {
+                insertQuery.append(tuples.get(field.getName()).get(i)).append(",");
+            }
+
+            insertQuery.deleteCharAt(insertQuery.length() - 1);
+            insertQuery.append(")");
+
+            executeInsert(conn, insertQuery);
         }
     }
 
@@ -200,11 +212,10 @@ public class Ruler {
         executeUpdate(conn, deleteQuery.toString());
     }
 
-    private void executeUpdate(Connection conn, String updateQuery) throws InvalidUpdateException {
-
-        try{
+    private void executeInsert(Connection conn, StringBuilder insertQuery) throws InvalidUpdateException {
+        try {
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate(updateQuery);
+            stmt.executeUpdate(insertQuery.toString());
         } catch (SQLException e) {
             throw new InvalidUpdateException(e.getMessage());
         }
@@ -241,6 +252,16 @@ public class Ruler {
             }
         } catch (SQLException e) {
             throw new InvalidQueryException(e.getMessage());
+        }
+    }
+
+    private void executeUpdate(Connection conn, String updateQuery) throws InvalidUpdateException {
+
+        try{
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(updateQuery);
+        } catch (SQLException e) {
+            throw new InvalidUpdateException(e.getMessage());
         }
     }
 }

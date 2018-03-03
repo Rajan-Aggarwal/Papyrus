@@ -9,12 +9,11 @@ public class DateField extends ColumnField {
     private String format;
     private String defaultDate;
 
-    public DateField(boolean ... args) throws ParseException {
+    public DateField(boolean ... args) {
 
         super(args);
         this.format = "";
         this.defaultDate = "";
-
     }
 
     public DateField(String format, String defaultDate, boolean ... args) throws ParseException {

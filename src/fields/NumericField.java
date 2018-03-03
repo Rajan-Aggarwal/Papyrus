@@ -6,7 +6,7 @@ public class NumericField extends ColumnField {
     private int size;
     private int precision;
 
-    public NumericField(int size, int precision, boolean ... args) { // nullable, primary, foreign, defValue
+    public NumericField(int size, int precision, boolean ... args) {
 
         super(args);
         this.size = size;

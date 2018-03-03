@@ -153,10 +153,10 @@ public class Mapper {
             field.setAccessible(true);
             VarcharField fieldValue = (VarcharField) field.get(tableObj);
             query.append(fieldName).append(" varchar(").append(fieldValue.getSize() + ")");
-            query.append(nullClause(fieldValue.isNullable()));
             primaryKeys.append(primaryClause(fieldValue.isPrimary(), fieldName));
-            query.append(uniqueClause(fieldValue.isUnique()));
             query.append(defaultVarcharClause(fieldValue.getDefaultText()));
+            query.append(uniqueClause(fieldValue.isUnique()));
+            query.append(nullClause(fieldValue.isNullable()));
             query.append(",");
 
         } else if (field.getType().equals(NumericField.class)) {
@@ -164,10 +164,10 @@ public class Mapper {
             field.setAccessible(true);
             NumericField fieldValue = (NumericField) field.get(tableObj);
             query.append(fieldName).append(" numeric(").append(fieldValue.getSize()).append(",").append(fieldValue.getPrecision()).append(")");
-            query.append(nullClause(fieldValue.isNullable()));
             primaryKeys.append(primaryClause(fieldValue.isPrimary(), fieldName));
-            query.append(uniqueClause(fieldValue.isUnique()));
             query.append(defaultNumericClause(fieldValue.getDefaultValue()));
+            query.append(uniqueClause(fieldValue.isUnique()));
+            query.append(nullClause(fieldValue.isNullable()));
             query.append(",");
 
         } else if (field.getType().equals(DateField.class)) {
@@ -175,12 +175,12 @@ public class Mapper {
             field.setAccessible(true);
             DateField fieldValue = (DateField) field.get(tableObj);
             query.append(fieldName).append(" date");
-            query.append(nullClause(fieldValue.isNullable()));
             primaryKeys.append(primaryClause(fieldValue.isPrimary(), fieldName));
-            query.append(uniqueClause(fieldValue.isUnique()));
-            //query.append(formatDateClause(fieldValue.getFormat()));
             query.append((defaultDateClause(fieldValue.getFormat(),
                     fieldValue.getDefaultDate())));
+            query.append(uniqueClause(fieldValue.isUnique()));
+            //query.append(formatDateClause(fieldValue.getFormat()));
+            query.append(nullClause(fieldValue.isNullable()));
             query.append(",");
 
         }
