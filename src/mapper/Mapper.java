@@ -13,13 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import scroll.*;
 
-/*
-    The ORM engine
+/**
+ * Class used to create your model schema.
+ * It converts a user-defined class of type Scroll into a real database table.
  */
 
 public class Mapper {
-
-    //static int counter = 0;
 
     private Scroll table;
     private String tableName;
@@ -29,9 +28,13 @@ public class Mapper {
         CONSTRUCTOR and CREATING THE TABLE
      */
 
-    public Mapper(Scroll tableObj) throws InvalidFieldException, InvalidTableDescriptionException {
+    /**
+     * Constructor for Mapper class
+     * @param tableObj It is the instance of a Scroll class to be converted into an sql table
+     * @throws MapperException
+     */
+    public Mapper(Scroll tableObj) throws MapperException {
 
-        //counter++;
         this.table = tableObj;
         this.tableName = table.getClass().getSimpleName();
         fields = table.getClass().getDeclaredFields();

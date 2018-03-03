@@ -72,7 +72,8 @@ public class ForeignKeyField extends ColumnField {
     }
 
     /**
-     * Getter for the name of the referenced field name of the referenced class
+     * Getter for the name of the referenced field name of the referenced class.
+     * @return The name of the referred field from the referred scroll.
      */
 
     public String getRefAttribute() {
