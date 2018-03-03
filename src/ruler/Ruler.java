@@ -10,16 +10,30 @@ import database.DAO;
 import scroll.Scroll;
 import java.sql.ResultSet;
 
+/**
+ * Class that contains helper functions to perform data manipulation
+ * queries.
+ */
 public class Ruler {
     private String tableName;
     private Field[] fields;
 
+    /**
+     * Constructor for the ruler class.
+     * @param tableObj Object which extends Scroll which is used to define the table.
+     */
     public Ruler (Scroll tableObj) {
 
         this.tableName = tableObj.getClass().getSimpleName();
         this.fields = tableObj.getClass().getDeclaredFields();
     }
 
+    /**
+     * Performs insert operation on the given table for one tuple.
+     * @param tuple HashMap where keys are the names of the attributes of the table
+     *              and values are the corresponding values for each attribute.
+     * @throws InvalidUpdateException when insert operation fails.
+     */
     public void insert (HashMap<String, Object> tuple) throws InvalidUpdateException {
 
         Connection conn = DAO.getConnection();
@@ -36,6 +50,14 @@ public class Ruler {
         executeInsert(conn, insertQuery);
     }
 
+    /**
+     * Performs insert operation on the given table for multiple tuple.
+     * @param tuples HashMap where keys are the names of the attributes of the given table
+     *               and values are ArrayLists containing the corresponding values for each attribute.
+     *               Each value of the ArrayList for each of the keys represents one tuple.
+     * @param num Integer for the number of tuples to be inserted.
+     * @throws InvalidUpdateException when insert operation fails.
+     */
     public void insert (HashMap<String, ArrayList<Object>> tuples, int num) throws InvalidUpdateException {
 
         Connection conn = DAO.getConnection();
@@ -54,6 +76,12 @@ public class Ruler {
         }
     }
 
+    /**
+     * Performs select operation on the table and selects all tuples subject to no constraints.
+     * @return HashMap where keys are the names of the attributes of the table and the values
+     *          are the corresponding values stored in the table under each attribute.
+     * @throws InvalidQueryException when select operation fails.
+     */
     public HashMap<String, ArrayList<Object>> selectAll() throws InvalidQueryException {
 
         Connection conn = DAO.getConnection();
@@ -71,6 +99,14 @@ public class Ruler {
         return tuples;
     }
 
+    /**
+     * Performs select operation on the table and selects all tuples subject to constraints.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @return HashMap where keys are the names of the attributes of the table and the values
+     *          are the corresponding values stored in the table under each attribute.
+     * @throws InvalidQueryException when select operation fails.
+     */
     public HashMap<String, ArrayList<Object>> selectAll(HashMap<String,Object> where) throws InvalidQueryException {
 
         Connection conn = DAO.getConnection();
@@ -94,6 +130,13 @@ public class Ruler {
         return tuples;
     }
 
+    /**
+     * Performs select operation on the table and selects specific tuples subject to no constraints.
+     * @param attributes ArrayList containing names of attributes to select from the table.
+     * @return HashMap where keys are the names of the attributes of the table and the values
+     *          are the corresponding values stored in the table under each attribute.
+     * @throws InvalidQueryException when select operation fails.
+     */
     public HashMap<String, ArrayList<Object>> select (ArrayList<String> attributes) throws InvalidQueryException {
 
         Connection conn = DAO.getConnection();
@@ -114,6 +157,15 @@ public class Ruler {
         return tuples;
     }
 
+    /**
+     * Performs select operation on the table and selects specific tuples subject to constraints.
+     * @param attributes ArrayList containing names of attributes to select from the table.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @return HashMap where keys are the names of the attributes of the table and the values
+     *          are the corresponding values stored in the table under each attribute.
+     * @throws InvalidQueryException when select operation fails.
+     */
     public HashMap<String, ArrayList<Object>> select (ArrayList<String> attributes, HashMap<String, Object> where) throws InvalidQueryException {
 
         Connection conn = DAO.getConnection();
@@ -141,6 +193,12 @@ public class Ruler {
         return tuples;
     }
 
+    /**
+     * Performs update operation on table subject to no constraints.
+     * @param set HashMap where keys are the names of the attributes to update
+     *             and values are the corresponding new values of each attribute.
+     * @throws InvalidUpdateException when update operation fails.
+     */
     public void updateAll(HashMap<String, Object> set) throws InvalidUpdateException {
 
         Connection conn = DAO.getConnection();
@@ -160,6 +218,14 @@ public class Ruler {
         executeUpdate(conn, updateQuery.toString());
     }
 
+    /**
+     * Performs update operation on table subject to constraints.
+     * @param set HashMap where keys are the names of the attributes to update
+     *             and values are the corresponding new values of each attribute.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @throws InvalidUpdateException when update operation fails.
+     */
     public void update(HashMap<String, Object> set, HashMap<String, Object> where) throws InvalidUpdateException {
 
         Connection conn = DAO.getConnection();
@@ -187,6 +253,10 @@ public class Ruler {
         executeUpdate(conn, updateQuery.toString());
     }
 
+    /**
+     * Performs delete operations on table subject to no constraints.
+     * @throws InvalidUpdateException when delete operation fails.
+     */
     public void deleteAll() throws InvalidUpdateException {
 
         Connection conn = DAO.getConnection();
@@ -194,6 +264,12 @@ public class Ruler {
         executeUpdate(conn, "delete from " + this.tableName);
     }
 
+    /**
+     * Performs delete operation on table subject to constraints.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @throws InvalidUpdateException when delete operation fails.
+     */
     public void delete(HashMap<String, Object> where) throws InvalidUpdateException {
 
         Connection conn = DAO.getConnection();
