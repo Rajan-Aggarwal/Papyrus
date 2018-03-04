@@ -368,4 +368,5 @@ public class Ruler {
             throw new InvalidUpdateException(e.getMessage());
         }
     }
+
 }
