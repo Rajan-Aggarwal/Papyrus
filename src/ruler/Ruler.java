@@ -44,7 +44,7 @@ public class Ruler {
 
         for (Field field:this.fields) {
             if(tuple.get(field.getName())!=null) {
-                if (field.getType().getSimpleName().equals("VarcharField")) {
+                if (tuple.get(field.getName()).getClass().getSimpleName().equals("String")) {
                     StringBuilder value = new StringBuilder("'");
                     value.append(tuple.get(field.getName()));
                     value.append("'");
@@ -83,7 +83,7 @@ public class Ruler {
 
             for (Field field:this.fields) {
                 if(tuples.get(field.getName())!=null) {
-                    if (field.getType().getSimpleName().equals("VarcharField")) {
+                    if (tuples.get(field.getName()).get(i).getClass().getSimpleName().equals("String")) {
                         StringBuilder value = new StringBuilder("'");
                         value.append(tuples.get(field.getName()).get(i));
                         value.append("'");

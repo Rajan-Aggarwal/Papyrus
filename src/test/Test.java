@@ -18,7 +18,7 @@ class Instructor extends Scroll {
 
     ForeignKeyField ID = new ForeignKeyField(new Student(), "ID");
     VarcharField name = new VarcharField( 10, false);
-    IntegerField tot_cred = new IntegerField(1000);
+    IntegerField salary = new IntegerField(1000);
 }
 
 
@@ -83,6 +83,8 @@ public class Test {
         //Update instructor salary where salary=2000
         HashMap<String, Object> updates = new HashMap<>();
         updates.put("salary", 3000);
+        where.clear();
+        where.put("salary", 2000);
 
         instructorRuler.update(updates, where);
 
