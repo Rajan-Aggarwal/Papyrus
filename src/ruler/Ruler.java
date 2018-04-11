@@ -297,6 +297,20 @@ public class Ruler {
     }
 
     /**
+     * Performs count operation to return total number of tuples subject to no constraints.
+     * @return Object which stores the total number of tuples in the table.
+     * @throws InvalidQueryException
+     */
+    public Object count() throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select count(*) from " + this.tableName);
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
      * Performs max aggregate function subject to constraints.
      * @param attribute String containing the column name.
      * @param where HashMap where keys are the names of attributes and values are the values
@@ -405,6 +419,29 @@ public class Ruler {
         Connection conn = DAO.getConnection();
 
         StringBuilder aggregateQuery = new StringBuilder("select count(" + attribute + ") from " + this.tableName);
+        StringBuilder whereClause = new StringBuilder(" where ");
+
+        for (HashMap.Entry<String,Object> entry:where.entrySet()) {
+            whereClause.append(entry.getKey()).append("=").append(entry.getValue()).append(" and ");
+        }
+
+        aggregateQuery.append(whereClause.substring(0, whereClause.length() - 5));
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs count operation to return total number of tuples subject to constraints.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @return Object which stores the total number of tuples in the table.
+     * @throws InvalidQueryException
+     */
+    public Object count(HashMap<String, Object> where) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select count(*) from " + this.tableName);
         StringBuilder whereClause = new StringBuilder(" where ");
 
         for (HashMap.Entry<String,Object> entry:where.entrySet()) {
