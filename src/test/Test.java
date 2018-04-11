@@ -98,6 +98,10 @@ public class Test {
             System.out.println();
         }
 
+        Object ob = instructorRuler.count("salary", where);
+
+        System.out.println(ob);
+
         System.out.println();
 
         //Delete student where tot_cred = 6

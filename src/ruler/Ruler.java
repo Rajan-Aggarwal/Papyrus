@@ -222,6 +222,201 @@ public class Ruler {
     }
 
     /**
+     * Performs max aggregate function subject to no constraints.
+     * @param attribute String containing the column name.
+     * @return Object which stores the maximum of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object max(String attribute) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select max(" + attribute + ") from " + this.tableName);
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs min aggregate function subject to no constraints.
+     * @param attribute String containing the column name.
+     * @return Object which stores the minimum of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object min(String attribute) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select min(" + attribute + ") from " + this.tableName);
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs avg aggregate function subject to no constraints.
+     * @param attribute String containing the column name.
+     * @return Object which stores the average of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object avg(String attribute) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select avg(" + attribute + ") from " + this.tableName);
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs sum aggregate function subject to no constraints.
+     * @param attribute String containing the column name.
+     * @return Object which stores the sum of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object sum(String attribute) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select sum(" + attribute + ") from " + this.tableName);
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs count aggregate function subject to no constraints.
+     * @param attribute String containing the column name.
+     * @return Object which stores number of tuples of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object count(String attribute) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select count(" + attribute + ") from " + this.tableName);
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs max aggregate function subject to constraints.
+     * @param attribute String containing the column name.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @return Object which stores the max of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object max(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select max(" + attribute + ") from " + this.tableName);
+        StringBuilder whereClause = new StringBuilder(" where ");
+
+        for (HashMap.Entry<String,Object> entry:where.entrySet()) {
+            whereClause.append(entry.getKey()).append("=").append(entry.getValue()).append(" and ");
+        }
+
+        aggregateQuery.append(whereClause.substring(0, whereClause.length() - 5));
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs min aggregate function subject to constraints.
+     * @param attribute String containing the column name.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @return Object which stores the min of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object min(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select min(" + attribute + ") from " + this.tableName);
+        StringBuilder whereClause = new StringBuilder(" where ");
+
+        for (HashMap.Entry<String,Object> entry:where.entrySet()) {
+            whereClause.append(entry.getKey()).append("=").append(entry.getValue()).append(" and ");
+        }
+
+        aggregateQuery.append(whereClause.substring(0, whereClause.length() - 5));
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs avg aggregate function subject to constraints.
+     * @param attribute String containing the column name.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @return Object which stores the average of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object avg(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select avg(" + attribute + ") from " + this.tableName);
+        StringBuilder whereClause = new StringBuilder(" where ");
+
+        for (HashMap.Entry<String,Object> entry:where.entrySet()) {
+            whereClause.append(entry.getKey()).append("=").append(entry.getValue()).append(" and ");
+        }
+
+        aggregateQuery.append(whereClause.substring(0, whereClause.length() - 5));
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs sum aggregate function subject to constraints.
+     * @param attribute String containing the column name.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @return Object which stores the sum of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object sum(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select sum(" + attribute + ") from " + this.tableName);
+        StringBuilder whereClause = new StringBuilder(" where ");
+
+        for (HashMap.Entry<String,Object> entry:where.entrySet()) {
+            whereClause.append(entry.getKey()).append("=").append(entry.getValue()).append(" and ");
+        }
+
+        aggregateQuery.append(whereClause.substring(0, whereClause.length() - 5));
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
+     * Performs count aggregate function subject to constraints.
+     * @param attribute String containing the column name.
+     * @param where HashMap where keys are the names of attributes and values are the values
+     *              are the corresponding constraints for each of the attributes.
+     * @return Object which stores the number of tuples of the attribute.
+     * @throws InvalidQueryException
+     */
+    public Object count(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
+
+        Connection conn = DAO.getConnection();
+
+        StringBuilder aggregateQuery = new StringBuilder("select count(" + attribute + ") from " + this.tableName);
+        StringBuilder whereClause = new StringBuilder(" where ");
+
+        for (HashMap.Entry<String,Object> entry:where.entrySet()) {
+            whereClause.append(entry.getKey()).append("=").append(entry.getValue()).append(" and ");
+        }
+
+        aggregateQuery.append(whereClause.substring(0, whereClause.length() - 5));
+
+        return executeAggregate(conn, aggregateQuery.toString());
+    }
+
+    /**
      * Performs update operation on table subject to no constraints.
      * @param set HashMap where keys are the names of the attributes to update
      *             and values are the corresponding new values of each attribute.
@@ -357,6 +552,23 @@ public class Ruler {
         } catch (SQLException e) {
             throw new InvalidQueryException(e.getMessage());
         }
+    }
+
+    private Object executeAggregate(Connection conn, String aggregateQuery) throws InvalidQueryException {
+
+        ResultSet rs;
+        Object aggregate = new Object();
+        try{
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery(aggregateQuery);
+            while(rs.next()) {
+                aggregate = rs.getObject(1);
+            }
+        } catch (SQLException e) {
+            throw new InvalidQueryException(e.getMessage());
+        }
+
+        return aggregate;
     }
 
     private void executeUpdate(Connection conn, String updateQuery) throws InvalidUpdateException {
