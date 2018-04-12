@@ -225,7 +225,7 @@ public class Ruler {
      * Performs max aggregate function subject to no constraints.
      * @param attribute String containing the column name.
      * @return Object which stores the maximum of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when max aggregate function fails.
      */
     public Object max(String attribute) throws InvalidQueryException {
 
@@ -240,7 +240,7 @@ public class Ruler {
      * Performs min aggregate function subject to no constraints.
      * @param attribute String containing the column name.
      * @return Object which stores the minimum of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when min aggregate function fails.
      */
     public Object min(String attribute) throws InvalidQueryException {
 
@@ -255,7 +255,7 @@ public class Ruler {
      * Performs avg aggregate function subject to no constraints.
      * @param attribute String containing the column name.
      * @return Object which stores the average of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when avg aggregate function fails.
      */
     public Object avg(String attribute) throws InvalidQueryException {
 
@@ -270,7 +270,7 @@ public class Ruler {
      * Performs sum aggregate function subject to no constraints.
      * @param attribute String containing the column name.
      * @return Object which stores the sum of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when sum aggregate function fails.
      */
     public Object sum(String attribute) throws InvalidQueryException {
 
@@ -285,7 +285,7 @@ public class Ruler {
      * Performs count aggregate function subject to no constraints.
      * @param attribute String containing the column name.
      * @return Object which stores number of tuples of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when count aggregate function fails.
      */
     public Object count(String attribute) throws InvalidQueryException {
 
@@ -299,7 +299,7 @@ public class Ruler {
     /**
      * Performs count operation to return total number of tuples subject to no constraints.
      * @return Object which stores the total number of tuples in the table.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when count aggregate function fails.
      */
     public Object count() throws InvalidQueryException {
 
@@ -316,7 +316,7 @@ public class Ruler {
      * @param where HashMap where keys are the names of attributes and values are the values
      *              are the corresponding constraints for each of the attributes.
      * @return Object which stores the max of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when max aggregate function fails.
      */
     public Object max(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
 
@@ -340,7 +340,7 @@ public class Ruler {
      * @param where HashMap where keys are the names of attributes and values are the values
      *              are the corresponding constraints for each of the attributes.
      * @return Object which stores the min of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when min aggregate function fails.
      */
     public Object min(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
 
@@ -364,7 +364,7 @@ public class Ruler {
      * @param where HashMap where keys are the names of attributes and values are the values
      *              are the corresponding constraints for each of the attributes.
      * @return Object which stores the average of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when avg aggregate function fails.
      */
     public Object avg(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
 
@@ -388,7 +388,7 @@ public class Ruler {
      * @param where HashMap where keys are the names of attributes and values are the values
      *              are the corresponding constraints for each of the attributes.
      * @return Object which stores the sum of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when sum aggregate function fails.
      */
     public Object sum(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
 
@@ -412,7 +412,7 @@ public class Ruler {
      * @param where HashMap where keys are the names of attributes and values are the values
      *              are the corresponding constraints for each of the attributes.
      * @return Object which stores the number of tuples of the attribute.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when count aggregate function fails.
      */
     public Object count(String attribute, HashMap<String, Object> where) throws InvalidQueryException {
 
@@ -435,7 +435,7 @@ public class Ruler {
      * @param where HashMap where keys are the names of attributes and values are the values
      *              are the corresponding constraints for each of the attributes.
      * @return Object which stores the total number of tuples in the table.
-     * @throws InvalidQueryException
+     * @throws InvalidQueryException when count aggregate function fails.
      */
     public Object count(HashMap<String, Object> where) throws InvalidQueryException {
 
