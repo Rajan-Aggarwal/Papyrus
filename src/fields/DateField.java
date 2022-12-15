@@ -40,6 +40,7 @@ public class DateField extends ColumnField {
         this.format = format;
         Date date = new SimpleDateFormat(this.format).parse(defaultDate);
         this.defaultDate = defaultDate;
+        // branch comment
     }
 
     /**
